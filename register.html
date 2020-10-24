@@ -39,6 +39,23 @@ function validateAndGetFormData() {
 		$("#email").focus();
 		return "";
 	}
+	var obj = {
+		email: emailVar
+	};
+	var getReqStr = createGET_BY_KEYRequest("90937319|-31948792541989839|90932585",
+		"Practice", "EMAIL-PASS", JSON.stringify(obj)
+		);
+	jQuery.ajaxSetup({async: false});
+	var resultObj = executeCommandAtGivenBaseUrl(getReqStr,
+	"http://api.login2explore.com:5577", "/api/irl");
+	alert(JSON.stringify(resultObj));
+	jQuery.ajaxSetup({async: true});
+	
+	if (resultObj.status === 200){
+		alert("Email id already registered");
+		$('#email').focus();
+		return "";
+	}
 	
 	var pwdVar = $("#pwd").val();
 	if (pwdVar === "") {
