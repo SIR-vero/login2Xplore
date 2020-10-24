@@ -20,7 +20,7 @@
       <label for="pwd">Password:</label>
       <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
     </div>
-    <button type="button" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default" onclick="login();">Submit</button>
 	<button type="button" class="btn btn-default" onclick="Register();">Register</button>
 	
   </form>
@@ -33,4 +33,60 @@ $('#email').focus();
 function Register(){
 	window.location.href = "register.html";
 }
+
+function validateAndGetFormData() {
+  var emailVar = $("#email").val();
+  if (emailVar === "") {
+    alert("Email ID Required Value");
+    $("#email").focus();
+    return "";
+  }
+  
+  var pwdVar = $("#pwd").val();
+  if (pwdVar === "") {
+    alert("Password is Required Value");
+    $("#pwd").focus();
+    return "";
+  }
+  
+  var jsonStrObj = {
+  email: emailVar,
+  pwd: pwdVar,
+  };
+  return (jsonStrObj);
+}
+
+function login(){
+  var jsonStrObj = validateAndGetFormData();
+  if (JSON.stringify(jsonStrObj) === ""){
+    return;
+  }
+  var obj = {
+    email: jsonStrObj.email
+  };
+  var getReqStr = createGET_BY_KEYRequest("90937319|-31948792541989839|90932585",
+    "Practice", "EMAIL-PASS", JSON.stringify(obj)
+    );
+  jQuery.ajaxSetup({async: false});
+  var resultObj = executeCommandAtGivenBaseUrl(getReqStr,
+  "http://api.login2explore.com:5577", "/api/irl");
+  alert(JSON.stringify(resultObj));
+  jQuery.ajaxSetup({async: true});
+
+  if (resultObj.status === 200)
+  {
+    if (resultObj.pwd == jsonStrObj.pwd){
+      window.location.replace("home.html");
+    }
+    else{
+      alert("INCORRECT Password");
+      $("#pwd").focus();
+    }
+  }
+  else{
+    alert("NO such email address");
+    $("#email").focus();
+  }
+}
+
 </script>
