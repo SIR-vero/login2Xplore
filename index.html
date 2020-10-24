@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src=" http://login2explore.com/jpdb/resources/js/0.0.3/jpdb-commons.js "></script>
 </head>
 <body>
 <div class="container">
@@ -58,24 +59,28 @@ function validateAndGetFormData() {
 
 function login(){
   var jsonStrObj = validateAndGetFormData();
-  if (JSON.stringify(jsonStrObj) === ""){
+  if (JSON.stringify(jsonStrObj) == ""){
     return;
   }
   var obj = {
     email: jsonStrObj.email
   };
+
   var getReqStr = createGET_BY_KEYRequest("90937319|-31948792541989839|90932585",
     "Practice", "EMAIL-PASS", JSON.stringify(obj)
     );
   jQuery.ajaxSetup({async: false});
   var resultObj = executeCommandAtGivenBaseUrl(getReqStr,
   "http://api.login2explore.com:5577", "/api/irl");
-  alert(JSON.stringify(resultObj));
+  //alert(JSON.stringify(resultObj));
   jQuery.ajaxSetup({async: true});
 
+  
   if (resultObj.status === 200)
   {
-    if (resultObj.pwd == jsonStrObj.pwd){
+    var temp = resultObj.data;
+    var temp1 = JSON.parse(temp);
+    if (JSON.stringify(temp1.record.pwd) === JSON.stringify(jsonStrObj.pwd)){
       window.location.replace("home.html");
     }
     else{
